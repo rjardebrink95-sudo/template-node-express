@@ -206,3 +206,4 @@ app.post("/chat", (req, res) => {
     response: "Du skrev: " + message,
   });
 });
+// trigger deploy
