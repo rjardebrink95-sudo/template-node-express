@@ -1,4 +1,5 @@
-import { randomUUID } from 'node:crypto';
+import cors from "cors";
+app.use(cors());import { randomUUID } from 'node:crypto';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { RequestListener } from 'node:http';
 import express, {
@@ -198,3 +199,10 @@ export function makeValidationMiddleware(
         next();
     };
 }
+app.post("/chat", (req, res) => {
+  const { message } = req.body;
+
+  res.json({
+    response: "Du skrev: " + message,
+  });
+});
