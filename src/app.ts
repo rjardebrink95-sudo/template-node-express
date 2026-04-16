@@ -1,5 +1,5 @@
 import cors from "cors";
-app.use(cors());import { randomUUID } from 'node:crypto';
+import { randomUUID } from "node:crypto";
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { RequestListener } from 'node:http';
 import express, {
@@ -37,7 +37,7 @@ export const initApp = async (
     logger: pino.Logger
 ): Promise<App> => {
     const app = express();
-    app.set('trust proxy', true);
+    app.use(cors());    app.set('trust proxy', true);
     app.use(
         express.raw({
             limit: '1kb',
