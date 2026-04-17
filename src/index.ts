@@ -10,6 +10,11 @@ app.get("/", (req, res) => {
   res.send("API is running 🚀");
 });
 
+// 🔥 TEST ROUTE (ny)
+app.get("/test", (req, res) => {
+  res.send("TEST OK");
+});
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
