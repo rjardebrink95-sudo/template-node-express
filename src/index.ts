@@ -21,6 +21,11 @@ app.get("/test", (req, res) => {
   res.send("TEST OK");
 });
 
+// 🔥 NY ROUTE (rätt plats)
+app.get("/test-db", async (req, res) => {
+  res.send("DB ROUTE FUNKAR");
+});
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
