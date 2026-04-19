@@ -10,27 +10,25 @@ app.use(cors());
 app.use(express.json());
 
 const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_ANON_KEY!
+  process.env.SUPABASE_URL as string,
+  process.env.SUPABASE_ANON_KEY as string
 );
 
-// TEST ROUTE
+// TEST
 app.get("/", (req, res) => {
   res.send("API is running");
 });
 
-// GET ALL NAMES
+// GET
 app.get("/names", async (req, res) => {
   const { data, error } = await supabase.from("name").select("*");
 
-  if (error) {
-    return res.status(500).json({ error: error.message });
-  }
+  if (error) return res.status(500).json({ error: error.message });
 
   res.json(data);
 });
 
-// POST NAME 🔥 (DETTA VAR DET DU SAKNADE)
+// POST
 app.post("/names", async (req, res) => {
   const { name } = req.body;
 
@@ -39,14 +37,13 @@ app.post("/names", async (req, res) => {
     .insert([{ name }])
     .select();
 
-  if (error) {
-    return res.status(500).json({ error: error.message });
-  }
+  if (error) return res.status(500).json({ error: error.message });
 
   res.json(data[0]);
 });
 
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
   console.log("Server running on port " + PORT);
 });
