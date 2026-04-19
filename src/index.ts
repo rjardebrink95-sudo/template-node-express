@@ -10,27 +10,26 @@ app.use(express.json());
 // 🔑 Supabase koppling
 const supabase = createClient(
   process.env.SUPABASE_URL!,
-  process.env.SUPABASE_KEY!
+  process.env.SUPABASE_ANON_KEY! // ← viktigt: rätt namn!
 );
 
-// 🔹 Root
+// TEST ROUTES
 app.get("/", (req, res) => {
   res.send("API is running 🚀");
 });
 
-// 🔹 Test route
 app.get("/test", (req, res) => {
   res.send("TEST OK");
 });
 
-// 🔥 DB route (redo för nästa steg)
-app.get("/test-db", async (req, res) => {
+// 🔥 HÄMTA DATA FRÅN DB
+app.get("/names", async (req, res) => {
   const { data, error } = await supabase
-    .from("test")
+    .from("name") // ← din tabell
     .select("*");
 
   if (error) {
-    return res.status(500).json({ error });
+    return res.status(500).json({ error: error.message });
   }
 
   res.json(data);
