@@ -9,56 +9,44 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 🔑 Hämta från Railway Variables (OBS: inga = här)
-const supabaseUrl = process.env.SUPABASE_URL as string;
-const supabaseKey = process.env.SUPABASE_ANON_KEY as string;
+const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_ANON_KEY!
+);
 
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-// ✅ TEST ROUTE
+// TEST ROUTE
 app.get("/", (req, res) => {
-  res.send("API is running 🚀");
+  res.send("API is running");
 });
 
-// ✅ GET ALL NAMES
+// GET ALL NAMES
 app.get("/names", async (req, res) => {
-  try {
-    const { data, error } = await supabase
-      .from("name")
-      .select("*");
+  const { data, error } = await supabase.from("name").select("*");
 
-    if (error) throw error;
-
-    res.json(data);
-  } catch (err: any) {
-    res.status(500).json({ error: err.message });
+  if (error) {
+    return res.status(500).json({ error: error.message });
   }
+
+  res.json(data);
 });
 
-// ✅ ADD NAME (POST)
+// POST NAME 🔥 (DETTA VAR DET DU SAKNADE)
 app.post("/names", async (req, res) => {
-  try {
-    const { name } = req.body;
+  const { name } = req.body;
 
-    if (!name) {
-      return res.status(400).json({ error: "Name is required" });
-    }
+  const { data, error } = await supabase
+    .from("name")
+    .insert([{ name }])
+    .select();
 
-    const { data, error } = await supabase
-      .from("name")
-      .insert([{ name }])
-      .select();
-
-    if (error) throw error;
-
-    res.json(data);
-  } catch (err: any) {
-    res.status(500).json({ error: err.message });
+  if (error) {
+    return res.status(500).json({ error: error.message });
   }
+
+  res.json(data[0]);
 });
 
-// 🚀 START SERVER
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log("Server running on port " + PORT);
 });
