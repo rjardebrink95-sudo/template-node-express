@@ -1,7 +1,6 @@
 {
   "name": "template-node-express",
   "version": "1.0.0",
-
   "dependencies": {
     "@supabase/supabase-js": "^2.0.0",
     "cors": "^2.8.5",
@@ -12,19 +11,17 @@
     "helmet": "^7.1.0",
     "http-graceful-shutdown": "^3.1.13",
     "pino": "^8.16.2",
-    "request-ip": "^3.3.0"
+    "request-ip": "^3.3.0",
+    "dotenv": "^16.4.5"
   },
-
   "main": "dist/index.js",
   "license": "MIT",
-
   "scripts": {
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
     "test": "jest src"
   },
-
   "devDependencies": {
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.21",
