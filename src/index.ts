@@ -13,17 +13,27 @@ const supabase = createClient(
   process.env.SUPABASE_KEY!
 );
 
+// 🔹 Root
 app.get("/", (req, res) => {
   res.send("API is running 🚀");
 });
 
+// 🔹 Test route
 app.get("/test", (req, res) => {
   res.send("TEST OK");
 });
 
-// 🔥 NY ROUTE (rätt plats)
+// 🔥 DB route (redo för nästa steg)
 app.get("/test-db", async (req, res) => {
-  res.send("DB ROUTE FUNKAR");
+  const { data, error } = await supabase
+    .from("test")
+    .select("*");
+
+  if (error) {
+    return res.status(500).json({ error });
+  }
+
+  res.json(data);
 });
 
 const PORT = process.env.PORT || 3000;
