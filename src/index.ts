@@ -9,7 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 🔑 Supabase koppling
+// 🔑 Supabase
 const supabase = createClient(
   process.env.SUPABASE_URL as string,
   process.env.SUPABASE_ANON_KEY as string
@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
   res.send("API is running");
 });
 
-// GET ALL NAMES
+// GET ALL
 app.get("/names", async (req, res) => {
   const { data, error } = await supabase.from("name").select("*");
 
@@ -29,7 +29,7 @@ app.get("/names", async (req, res) => {
   res.json(data);
 });
 
-// POST NAME
+// CREATE
 app.post("/names", async (req, res) => {
   const { name } = req.body;
 
@@ -43,7 +43,7 @@ app.post("/names", async (req, res) => {
   res.json(data[0]);
 });
 
-// 🔥 DELETE NAME
+// DELETE
 app.delete("/names/:id", async (req, res) => {
   const { id } = req.params;
 
@@ -55,6 +55,22 @@ app.delete("/names/:id", async (req, res) => {
   if (error) return res.status(500).json({ error: error.message });
 
   res.json({ success: true });
+});
+
+// 🔥 UPDATE
+app.put("/names/:id", async (req, res) => {
+  const { id } = req.params;
+  const { name } = req.body;
+
+  const { data, error } = await supabase
+    .from("name")
+    .update({ name })
+    .eq("id", id)
+    .select();
+
+  if (error) return res.status(500).json({ error: error.message });
+
+  res.json(data[0]);
 });
 
 const PORT = process.env.PORT || 3000;
