@@ -20,61 +20,72 @@ app.get("/", (req, res) => {
   res.send("API is running");
 });
 
-// GET ALL
+// 📥 GET ALLA NAMN
 app.get("/names", async (req, res) => {
-  const { data, error } = await supabase.from("name").select("*");
+  const { data, error } = await supabase
+    .from("name") // 👈 viktigt
+    .select("*")
+    .order("id", { ascending: true });
 
-  if (error) return res.status(500).json({ error: error.message });
+  if (error) {
+    return res.status(500).json({ error });
+  }
 
   res.json(data);
 });
 
-// CREATE
+// ➕ LÄGG TILL NAMN
 app.post("/names", async (req, res) => {
   const { name } = req.body;
 
   const { data, error } = await supabase
-    .from("name")
+    .from("name") // 👈 viktigt
     .insert([{ name }])
     .select();
 
-  if (error) return res.status(500).json({ error: error.message });
+  if (error) {
+    return res.status(500).json({ error });
+  }
 
-  res.json(data[0]);
+  res.json(data);
 });
 
-// DELETE
-app.delete("/names/:id", async (req, res) => {
-  const { id } = req.params;
-
-  const { error } = await supabase
-    .from("name")
-    .delete()
-    .eq("id", id);
-
-  if (error) return res.status(500).json({ error: error.message });
-
-  res.json({ success: true });
-});
-
-// 🔥 UPDATE
+// ✏️ ÄNDRA NAMN
 app.put("/names/:id", async (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
 
   const { data, error } = await supabase
-    .from("name")
+    .from("name") // 👈 viktigaste fixen
     .update({ name })
     .eq("id", id)
     .select();
 
-  if (error) return res.status(500).json({ error: error.message });
+  if (error) {
+    return res.status(500).json({ error });
+  }
 
-  res.json(data[0]);
+  res.json(data);
 });
 
-const PORT = process.env.PORT || 3000;
+// ❌ TA BORT NAMN
+app.delete("/names/:id", async (req, res) => {
+  const { id } = req.params;
 
+  const { error } = await supabase
+    .from("name") // 👈 viktigt
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    return res.status(500).json({ error });
+  }
+
+  res.json({ success: true });
+});
+
+// 🚀 START SERVER
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log("Server running on port " + PORT);
 });
